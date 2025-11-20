@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from datetime import datetime
-from sqlalchemy import Integer, String, func, DateTime, ForeignKey
+
+from sqlalchemy import DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
@@ -22,8 +23,7 @@ class User:
     )
 
     urls: Mapped[list[URL]] = relationship(
-        back_populates="user",
-        default_factory=list
+        back_populates='user', default_factory=list
     )
 
 
@@ -33,19 +33,20 @@ class URL:
 
     id: Mapped[int] = mapped_column(Integer, init=False, primary_key=True)
 
-    
     original_url: Mapped[str] = mapped_column(String, nullable=False)
-    short_code: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
+    short_code: Mapped[str] = mapped_column(
+        String(20), unique=True, nullable=False
+    )
 
     expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now(), nullable=False
     )
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey('users.id'), nullable=False
+    )
 
-    user: Mapped["User"] = relationship(back_populates="urls")
+    user: Mapped[User] = relationship(back_populates='urls')
 
     clicks: Mapped[int] = mapped_column(Integer, default=0)
-
-    

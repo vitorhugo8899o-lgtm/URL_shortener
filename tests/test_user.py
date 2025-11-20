@@ -1,3 +1,6 @@
+from http import HTTPStatus
+
+
 def test_create_user(client):
 
     response = client.post(
@@ -82,7 +85,7 @@ def test_create_token(client):
 
     response = client.post(
         '/auth/Login',
-        json={'email': 'novo_email@test.com', 'password': 'secretpassword'},
+        data={'username': 'novo_email@test.com', 'password': 'secretpassword'},
     )
 
     status = 200
@@ -106,13 +109,16 @@ def test_information_invalide_email(client):
 
     response = client.post(
         '/auth/Login',
-        json={'email': 'novo_email88@test.com', 'password': 'secretpassword'},
+        data={
+            'username': 'novo_email88@test.com',
+            'password': 'secretpassword',
+        },
     )
 
     status = 401
 
     assert response.status_code == status
-    assert "Invalid email or password" in response.json()['detail']
+    assert 'Invalid email or password' in response.json()['detail']
 
 
 def test_information_invalide_password(client):
@@ -129,10 +135,97 @@ def test_information_invalide_password(client):
 
     response = client.post(
         '/auth/Login',
-        json={'email': 'novo_email@test.com', 'password': 'secret88password'},
+        data={
+            'username': 'novo_email@test.com',
+            'password': 'secret88password',
+        },
     )
 
     status = 401
 
     assert response.status_code == status
-    assert "Invalid email or password" in response.json()['detail']
+    assert 'Invalid email or password' in response.json()['detail']
+
+
+def test_alter_user(client, token):
+    alter = {
+        'username': 'Teste_Unic8o',
+        'email': 'novo_email@test.com',
+        'password': 'secretpassword',
+    }
+
+    response = client.put(
+        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+    )
+
+    response_data = response.json()
+    assert 'Successful changes, welcome.' in response_data
+
+
+def test_alter_email_exist(client, token):
+    create = client.post(
+        '/auth/Registry',
+        json={
+            'username': 'Teste_Unic8o',
+            'email': 'novo_email@test.com',
+            'password': 'secretpassword',
+        },
+    )
+
+    print(create)
+
+    alter = {
+        'username': 'Teste_Unic8o',
+        'email': 'novo_email@test.com',
+        'password': 'secretpassword',
+    }
+
+    response = client.put(
+        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+    )
+
+    response_data = response.json()
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response_data['detail'] == 'Email already in use'
+
+
+def test_alter_username_exist(client, token):
+    create = client.post(
+        '/auth/Registry',
+        json={
+            'username': 'Teste_Unic8o',
+            'email': 'novo_email@test.com',
+            'password': 'secretpassword',
+        },
+    )
+
+    print(create)
+
+    alter = {
+        'username': 'Teste_Unic8o',
+        'email': 'novo_email7@test.com',
+        'password': 'secretpassword',
+    }
+
+    response = client.put(
+        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+    )
+
+    response_data = response.json()
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response_data['detail'] == 'Username already in use'
+
+
+def test_delete_user(client, token):
+
+    response = client.delete(
+        '/auth/delete', headers={'Authorization': f'Bearer {token}'}
+    )
+
+    response_data = response.json()
+
+    status = 200
+
+    assert response.status_code == status
+    assert response_data['detail'] == 'User successfully deleted!'
+

@@ -47,17 +47,31 @@ def client(override_get_session):
 
 @pytest.fixture
 def user(session):
-    password = 'teste'
+    raw_password = 'teste'  # A senha original
     user = User(
         username='teste@',
         email='teste@gmail.com',
-        password=hash_password(password),
+        # Hasheia a senha para armazenar no banco
+        password=hash_password(raw_password),
     )
 
     session.add(user)
     session.commit()
     session.refresh(user)
 
-    user.cleanpassword == password
+    # Retorna o objeto User E a senha original
+    return user, raw_password
 
-    return user
+
+@pytest.fixture
+def token(client, user):
+    # Desempacota o User e a senha original
+    user, raw_password = user
+
+    login_data = {
+        'username': user.email,
+        'password': raw_password,  # Usa a senha original
+    }
+
+    response = client.post('/auth/Login', data=login_data)
+    return response.json()['access_token']

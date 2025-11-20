@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from http import HTTPStatus
+from typing import Annotated
 
 from argon2 import PasswordHasher
 from argon2.exceptions import VerificationError
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt import decode, encode
 from jwt.exceptions import DecodeError, ExpiredSignatureError
 from sqlalchemy import select
@@ -13,10 +14,11 @@ from sqlalchemy.orm import Session
 from app.api.endpoints.core.settings import Settings
 from app.db.database import get_session
 from app.db.models import User
-from app.schemas.schemas import LoginSchema, Token, UserRegistry
+from app.schemas.schemas import Token, UserRegistry
 
 oauth = OAuth2PasswordBearer(tokenUrl='/auth/Login')
 setting = Settings()
+Form_data = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 ph = PasswordHasher()
 
@@ -90,12 +92,12 @@ def crete_token_acesses(data: dict):
 
 
 def verifying_credentials(
-    form_data: LoginSchema,
+    form_data: Form_data,
     db: Session = Depends(get_session),
 ):
 
     user = db.execute(
-        select(User).where(User.email == form_data.email)
+        select(User).where(User.email == form_data.username)
     ).scalar_one_or_none()
 
     if not user:
@@ -118,28 +120,89 @@ def get_current_user(
     token: str = Depends(oauth), db: Session = Depends(get_session)
 ):
 
-    invalide_token = HTTPException(
-        status_code=HTTPStatus.UNAUTHORIZED,
-        detail='Incorrect email or password',
-    )
-
     try:
         payload = decode(
-            token, setting.SECRET_KEY, algorithms=setting.ALGORITHM
+            token, setting.SECRET_KEY, algorithms=[setting.ALGORITHM]
         )
-
         email_user = payload.get('sub')
         if not email_user:
-            raise invalide_token
+            raise HTTPException(401, 'Invalid token')
 
-    except DecodeError:
-        raise invalide_token
-    except ExpiredSignatureError:
-        raise invalide_token
+    except (DecodeError, ExpiredSignatureError):
+        raise HTTPException(401, 'Invalid token')
 
-    user = db.scalar(select(User).where(User.email == email_user))
+    user = db.execute(
+        select(User).where(User.email == email_user)
+    ).scalar_one_or_none()
 
     if not user:
-        return invalide_token
+        raise HTTPException(401, 'Invalid token')
 
     return user
+
+
+def alter_user_information(
+    user_data: UserRegistry,
+    current_user: User,
+    db: Session = Depends(get_session),
+):
+    try:
+        if user_data.email != current_user.email:
+            existing_user_by_email = db.execute(
+                select(User).where(User.email == user_data.email)
+            ).scalar_one_or_none()
+
+            if existing_user_by_email:
+                raise HTTPException(
+                    status_code=HTTPStatus.CONFLICT,
+                    detail='Email already in use',
+                )
+
+        if user_data.username != current_user.username:
+            existing_user_by_username = db.execute(
+                select(User).where(User.username == user_data.username)
+            ).scalar_one_or_none()
+
+            if existing_user_by_username:
+                raise HTTPException(
+                    status_code=HTTPStatus.CONFLICT,
+                    detail='Username already in use',
+                )
+
+        current_user.email = user_data.email
+        current_user.username = user_data.username
+
+        if user_data.password:
+            current_user.password = hash_password(user_data.password)
+
+        db.commit()
+        db.refresh(current_user)
+
+        return 'Successful changes, welcome.'
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+            detail=f'Internal Error: {str(e)}',
+        )
+
+
+def delete_user_bd(
+    user_data: User = Depends(get_current_user),
+    db: Session = Depends(get_session),
+):
+
+    user = db.execute(
+        select(User).where(User.email == user_data.email)
+    ).scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(409, 'User not found!')
+
+    db.delete(user)
+    db.commit()
+
+    return {'detail': 'User successfully deleted!'}

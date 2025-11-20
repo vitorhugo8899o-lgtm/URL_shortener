@@ -21,3 +21,7 @@ class Token(BaseModel):
 class LoginSchema(BaseModel):
     email: EmailStr
     password: str
+
+
+class Message(BaseException):
+    message: str
