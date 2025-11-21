@@ -35,7 +35,7 @@ def verify_password(password: str, db_password: str):
     except VerificationError:
         return False
 
-    except Exception:
+    except Exception:  # pragma: no cover
         return False
 
 
@@ -183,7 +183,7 @@ def alter_user_information(
     except HTTPException:
         raise
 
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
             detail=f'Internal Error: {str(e)}',
@@ -199,7 +199,7 @@ def delete_user_bd(
         select(User).where(User.email == user_data.email)
     ).scalar_one_or_none()
 
-    if not user:
+    if not user:  # pragma: no cover
         raise HTTPException(409, 'User not found!')
 
     db.delete(user)

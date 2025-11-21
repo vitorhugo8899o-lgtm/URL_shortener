@@ -1,10 +1,11 @@
-import pytest
 from fastapi.testclient import TestClient
+from hashids import Hashids
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
-from app.db.models import User, table_registry
+import pytest
+from app.db.models import URL, User, table_registry
 from app.main import app
 from app.services.user_service import get_session, hash_password
 
@@ -47,11 +48,10 @@ def client(override_get_session):
 
 @pytest.fixture
 def user(session):
-    raw_password = 'teste'  # A senha original
+    raw_password = 'teste'
     user = User(
         username='teste@',
         email='teste@gmail.com',
-        # Hasheia a senha para armazenar no banco
         password=hash_password(raw_password),
     )
 
@@ -59,19 +59,40 @@ def user(session):
     session.commit()
     session.refresh(user)
 
-    # Retorna o objeto User E a senha original
     return user, raw_password
 
 
 @pytest.fixture
 def token(client, user):
-    # Desempacota o User e a senha original
     user, raw_password = user
 
     login_data = {
         'username': user.email,
-        'password': raw_password,  # Usa a senha original
+        'password': raw_password,
     }
 
     response = client.post('/auth/Login', data=login_data)
     return response.json()['access_token']
+
+
+@pytest.fixture
+def url(session, user):
+
+    new_url = URL(
+        original_url='https://www.example.com/long-page',
+        short_code='TEMP',
+        user_id=1,
+        expires_at=None,
+    )
+
+    session.add(new_url)
+    session.flush()
+
+    hashids_instance = Hashids(salt='secret_key', min_length=5)
+    short_code = hashids_instance.encode(new_url.id)
+
+    new_url.short_code = short_code
+    session.commit()
+    session.refresh(new_url)
+
+    return new_url

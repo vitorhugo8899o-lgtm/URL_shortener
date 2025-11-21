@@ -23,7 +23,9 @@ class User:
     )
 
     urls: Mapped[list[URL]] = relationship(
-        back_populates='user', default_factory=list
+        init=False,
+        cascade='all, delete-orphan',
+        lazy='selectin',
     )
 
 
@@ -46,7 +48,5 @@ class URL:
     user_id: Mapped[int] = mapped_column(
         ForeignKey('users.id'), nullable=False
     )
-
-    user: Mapped[User] = relationship(back_populates='urls')
 
     clicks: Mapped[int] = mapped_column(Integer, default=0)

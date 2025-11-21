@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, HttpUrl
 
 
 class UserRegistry(BaseModel):
@@ -25,3 +25,16 @@ class LoginSchema(BaseModel):
 
 class Message(BaseException):
     message: str
+
+
+class URLCreate(BaseModel):
+    url: HttpUrl
+
+
+class URLResponse(BaseModel):
+    id: int
+    short_code: str
+    original_url: str
+
+    class Config:
+        from_attributes = True
