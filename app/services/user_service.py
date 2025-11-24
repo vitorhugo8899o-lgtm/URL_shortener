@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from app.api.endpoints.core.settings import Settings
 from app.db.database import get_session
 from app.db.models import User
-from app.schemas.schemas import Token, UserRegistry
+from app.schemas.schemas import Token, UserPublic, UserRegistry
 
 oauth = OAuth2PasswordBearer(tokenUrl='/auth/Login')
 setting = Settings()
@@ -75,7 +75,9 @@ async def registry_user(
     db.commit()
     db.refresh(new_user)
 
-    return new_user
+    return UserPublic(
+        id=new_user.id, username=new_user.username, email=new_user.email
+    )
 
 
 def crete_token_acesses(data: dict):

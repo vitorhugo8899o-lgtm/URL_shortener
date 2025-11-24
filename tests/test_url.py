@@ -8,7 +8,7 @@ def test_create_url_short(client, token):
         '/shorther_url/get_url',
         headers={'Authorization': f'Bearer {token}'},
         json={
-            'url': 'https://gemini.google.com/app/68cbce004f96d4f1?hl=pt-BR'
+            'url': 'https://www.google.com/search?gs_ssp=eJzj4tTP1TcwMU02T1JgNGB0YPBiS8_PT89JBQBASQXT&q=google&rlz=1C1FKPE_pt-PTBR1163BR1163&oq=goo&gs_lcrp=EgZjaHJvbWUqEwgBEC4YgwEYxwEYsQMY0QMYgAQyBggAEEUYQTITCAEQLhiDARjHARixAxjRAxiABDINCAIQABiDARixAxiABDIGCAMQRRg5MgYIBBBFGDwyBggFEEUYPDIGCAYQBRhAMgYIBxBFGEHSAQg1NjcyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8'
         },
     )
 
@@ -68,3 +68,25 @@ def test_redirect_url_not_found(client, token):
 
     assert response.status_code == status
     assert response.json() == {'detail': 'URL not found'}
+
+
+def test_get_urls_user(client, token):
+    url = client.post(
+        '/shorther_url/get_url',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'url': 'https://www.google.com/search?gs_ssp=eJzj4tTP1TcwMU02T1JgNGB0YPBiS8_PT89JBQBASQXT&q=google&rlz=1C1FKPE_pt-PTBR1163BR1163&oq=goo&gs_lcrp=EgZjaHJvbWUqEwgBEC4YgwEYxwEYsQMY0QMYgAQyBggAEEUYQTITCAEQLhiDARjHARixAxjRAxiABDINCAIQABiDARixAxiABDIGCAMQRRg5MgYIBBBFGDwyBggFEEUYPDIGCAYQBRhAMgYIBxBFGEHSAQg1NjcyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8'
+        },
+    )
+
+    print(url)
+
+    response = client.get(
+        '/shorther_url/get_my_urls',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    json = response.json()
+
+    assert response.status_code == HTTPStatus.OK
+    assert 'urls' in json

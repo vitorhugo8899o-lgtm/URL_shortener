@@ -19,6 +19,9 @@ def test_create_user(client):
     print(user)
 
     assert response.status_code == status
+    assert 'username' in user
+    assert 'email' in user
+    assert 'id' in user
 
 
 def test_username_exist(client):

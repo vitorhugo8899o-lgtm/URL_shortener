@@ -15,7 +15,7 @@ from app.services.user_service import (
     verifying_credentials,
 )
 
-routh_auth = APIRouter(prefix='/auth')
+routh_auth = APIRouter(prefix='/auth', tags=['Users'])
 CurrentUser = Annotated[User, Depends(get_current_user)]
 Db = Annotated[Session, Depends(get_session)]
 
@@ -28,7 +28,6 @@ async def create_user(user: Annotated[UserRegistry, Depends(registry_user)]):
 @routh_auth.post('/Login', status_code=HTTPStatus.OK, response_model=Token)
 def login_user(token: Annotated[Token, Depends(verifying_credentials)]):
     return token
-
 
 @routh_auth.put('/alter', status_code=HTTPStatus.OK)
 def alter_information(

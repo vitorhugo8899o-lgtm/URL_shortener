@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel, EmailStr, HttpUrl
 
 
@@ -38,3 +40,7 @@ class URLResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class URlList(BaseModel):
+    urls: List[URLResponse]
