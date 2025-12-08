@@ -7,8 +7,6 @@ from argon2.exceptions import VerificationError
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
-from jwt import decode, encode
-from jwt.exceptions import DecodeError, ExpiredSignatureError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
