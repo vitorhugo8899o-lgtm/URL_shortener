@@ -7,6 +7,7 @@ from argon2.exceptions import VerificationError
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
+from jwt import decode, encode
 from jwt.exceptions import DecodeError, ExpiredSignatureError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -89,7 +90,7 @@ def crete_token_acesses(data: dict):
 
     to_encode.update({'exp': expire})
 
-    encode_jwt = encode(to_encode, setting.SECRET_KEY, setting.ALGORITHM)
+    encode_jwt = jwt.encode(to_encode, setting.SECRET_KEY, setting.ALGORITHM)
     return encode_jwt
 
 
@@ -123,14 +124,14 @@ def get_current_user(
 ):
 
     try:
-        payload = decode(
+        payload = jwt.decode(
             token, setting.SECRET_KEY, algorithms=[setting.ALGORITHM]
         )
         email_user = payload.get('sub')
         if not email_user:
             raise HTTPException(401, 'Invalid token')
 
-    except (DecodeError, ExpiredSignatureError):
+    except (jwt.DecodeError, jwt.ExpiredSignatureError):
         raise HTTPException(401, 'Invalid token')
 
     user = db.execute(
