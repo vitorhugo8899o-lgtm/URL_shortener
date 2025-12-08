@@ -90,3 +90,16 @@ def test_get_urls_user(client, token):
 
     assert response.status_code == HTTPStatus.OK
     assert 'urls' in json
+
+
+
+def test_delete_url(client, token):
+    create = client.post(
+        '/shorther_url/get_url',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'url': 'https://www.google.com/search?gs_ssp=eJzj4tTP1TcwMU02T1JgNGB0YPBiS8_PT89JBQBASQXT&q=google&rlz=1C1FKPE_pt-PTBR1163BR1163&oq=goo&gs_lcrp=EgZjaHJvbWUqEwgBEC4YgwEYxwEYsQMY0QMYgAQyBggAEEUYQTITCAEQLhiDARjHARixAxjRAxiABDINCAIQABiDARixAxiABDIGCAMQRRg5MgYIBBBFGDwyBggFEEUYPDIGCAYQBRhAMgYIBxBFGEHSAQg1NjcyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8'
+        },
+    )
+
+    response = client.post('/shorther_url/get_url')

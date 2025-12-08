@@ -12,6 +12,7 @@ from app.services.url_services import (
     create_short_url,
     get_url_shorter,
     get_url_user,
+    delete_url_user
 )
 from app.services.user_service import get_current_user
 
@@ -35,9 +36,13 @@ def show_my_urls(current_user: CurrentUser, db: Db):
     return get_url_user(current_user, db)
 
 
+@routh.delete('/Delete_URL', status_code=HTTPStatus.OK, )
+def delete_url(current_user: CurrentUser, db: Db, url_id: int):
+    return delete_url_user(current_user,db, url_id)
+
 @routh.get('/{short_code}')
 def redirect_to_original_url(
-    current_user: CurrentUser, short_code: str, db: Db
+    short_code: str, db: Db
 ):
 
     original_url = get_url_shorter(db, short_code)

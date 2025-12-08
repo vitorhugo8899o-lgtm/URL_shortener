@@ -23,6 +23,17 @@ def create_url_record_and_get_id(
     url_data: URLCreate, user_id: int, db: Session
 ) -> URL:
 
+    url_str = str(url_data.url) 
+
+    condition = (URL.original_url == url_str)
+
+
+    query_result = db.execute(select(URL).where(condition)).first()
+    
+    if query_result:
+        existing_url = query_result[0] 
+        raise HTTPException(status_code=409, detail="Url already exists")
+
     new_url = URL(
         original_url=str(url_data.url),
         short_code='TEMP',
@@ -77,7 +88,7 @@ def get_url_shorter(db: Db, short_code: str) -> str:
         raise HTTPException(status_code=404, detail='URL not found')
 
     now = datetime.now(timezone.utc)
-    if url_record.expires_at and url_record.expires_at < now:
+    if url_record.expires_at and url_record.expires_at.replace(tzinfo=timezone.utc) < now:
         raise HTTPException(status_code=410, detail='Expired url')
 
     url_record.clicks += 1
@@ -91,3 +102,19 @@ def get_url_user(current_user: User, db: Session):
     urls = db.execute(stmt).scalars().all()
 
     return {'urls': urls}
+
+
+def delete_url_user(current_user: User, db: Session, id_url: int):
+    stmt = select(URL).where(
+    (URL.id == id_url) & (URL.user_id == current_user.id)
+)
+
+    url = db.scalar(stmt)
+
+    if not url:
+        raise HTTPException(status_code=404,detail='Url not found')
+    
+    db.delete(url)
+    db.commit()
+
+    return {'detail': 'URL successfully delete!'}

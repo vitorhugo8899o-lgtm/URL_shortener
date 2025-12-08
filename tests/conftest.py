@@ -1,10 +1,10 @@
+import pytest
 from fastapi.testclient import TestClient
 from hashids import Hashids
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
-import pytest
 from app.db.models import URL, User, table_registry
 from app.main import app
 from app.services.user_service import get_session, hash_password

@@ -45,9 +45,9 @@ def user_exist(user_data: UserRegistry, db: Session = Depends(get_session)):
         User.username == user_data.username
     )
 
-    result = db.execute(select(User).where(condition))
-
-    found_user = result.scalar_one_or_none()
+    found_user = db.execute(
+        select(User).where(condition)
+    ).scalar_one_or_none() 
 
     if found_user:
         if found_user.email == user_data.email:

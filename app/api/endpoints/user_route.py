@@ -29,6 +29,7 @@ async def create_user(user: Annotated[UserRegistry, Depends(registry_user)]):
 def login_user(token: Annotated[Token, Depends(verifying_credentials)]):
     return token
 
+
 @routh_auth.put('/alter', status_code=HTTPStatus.OK)
 def alter_information(
     user_data: UserRegistry, current_user: CurrentUser, db: Db
