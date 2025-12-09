@@ -2,13 +2,13 @@
 
 [![Status do Projeto](https://img.shields.io/badge/Status-Em%20Produção-brightgreen)](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/)
 
-## 🚀 Descrição do Projeto
+## 💥 Descrição do Projeto
 
 O **URL_shortener** é um projeto desenvolvido com o objetivo de transformar URLs longas em links curtos e gerenciáveis.
 
 Este projeto foi criado com o propósito de enriquecer o currículo, demonstrando habilidades completas de desenvolvimento **full-stack**, desde a criação de APIs seguras até a implementação de uma interface de usuário dinâmica.
 
-## ✨ Funcionalidades Principais
+## 🤠 Funcionalidades Principais
 
 * **Encurtamento de URL:** Transforma qualquer URL longa em um link curto e exclusivo.
 * **Autenticação Segura:** Login e cadastro de usuários para gerenciamento de links.
@@ -52,15 +52,15 @@ A aplicação está totalmente funcional e implantada online:
 
 ## 💻 Como Acessar a Aplicação
 
-1.  [cite_start]Acesse o link da aplicação: [https://front-url-vitor-hugos-projects-411fbd87.vercel.app/](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/)[cite: 2].
-2.  Você será redirecionado para a página de **Login**. [cite_start]Se não possuir uma conta, crie uma[cite: 2].
-3.  [cite_start]Após o cadastro/login, você acessará a página **principal** para encurtar URLs[cite: 2].
-4.  [cite_start]As URLs criadas podem ser gerenciadas na seção **"Minhas URLs"** no menu de navegação, onde é possível acessá-las ou excluí-las[cite: 3].
-5.  [cite_start]O menu de navegação também oferece opções para **alteração de informações de conta**, **exclusão de conta** e **logout**[cite: 3].
+1.  Acesse o link da aplicação: [https://front-url-vitor-hugos-projects-411fbd87.vercel.app/](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/).
+2.  Você será redirecionado para a página de **Login**. Se não possuir uma conta, crie uma.
+3.  Após o cadastro/login, você acessará a página **principal** para encurtar URLs.
+4.  As URLs criadas podem ser gerenciadas na seção **"Minhas URLs"** no menu de navegação, onde é possível acessá-las ou excluí-las.
+5.  O menu de navegação também oferece opções para **alteração de informações de conta**, **exclusão de conta** e **logout**.
 
 ## ⚙️ Configuração e Execução Local (Backend Apenas)
 
-[cite_start]**Atenção:** A execução local é voltada apenas para o **Backend**[cite: 2]. [cite_start]O código do frontend não está disponível neste repositório[cite: 2].
+**Atenção:** A execução local é voltada apenas para o **Backend**. O código do frontend não está disponível neste repositório.
 
 ### Pré-requisitos
 
@@ -87,4 +87,5 @@ A aplicação está totalmente funcional e implantada online:
     task run
     ```
 
-[cite_start]A aplicação estará rodando localmente no endereço: `http://127.0.0.1:8000` (porta 8000)[cite: 2].
+A aplicação estará rodando localmente no endereço: `http://127.0.0.1:8000` (porta 8000).
+
