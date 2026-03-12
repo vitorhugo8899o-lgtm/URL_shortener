@@ -25,7 +25,7 @@ class LoginSchema(BaseModel):
     password: str
 
 
-class Message(BaseException):
+class Message(BaseModel):
     message: str
 
 
