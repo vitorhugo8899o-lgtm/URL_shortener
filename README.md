@@ -2,20 +2,20 @@
 
 [![Status do Projeto](https://img.shields.io/badge/Status-Em%20Produção-brightgreen)](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/)
 
-## 💥 Descrição do Projeto
+##  Descrição do Projeto
 
 O **URL_shortener** é um projeto desenvolvido com o objetivo de transformar URLs longas em links curtos e gerenciáveis.
 
 Este projeto foi criado com o propósito de enriquecer o currículo, demonstrando habilidades completas de desenvolvimento **full-stack**, desde a criação de APIs seguras até a implementação de uma interface de usuário dinâmica.
 
-## 🤠 Funcionalidades Principais
+##  Funcionalidades Principais
 
 * **Encurtamento de URL:** Transforma qualquer URL longa em um link curto e exclusivo.
 * **Autenticação Segura:** Login e cadastro de usuários para gerenciamento de links.
 * **Gerenciamento de Links:** O usuário pode visualizar, acessar e excluir suas URLs encurtadas na seção "Minhas URLs".
 * **Gerenciamento de Conta:** Opções para alteração de informações de conta e exclusão de conta.
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 O projeto é dividido em **Backend** (API) e **Frontend** (Interface do Usuário).
 
@@ -40,7 +40,7 @@ O projeto é dividido em **Backend** (API) e **Frontend** (Interface do Usuário
 | **react-router-dom** | Gerenciamento das rotas da aplicação (navegação entre páginas). |
 | **Axios** | Cliente HTTP para realizar requisições eficientes à API Backend. |
 
-## 🌐 Deploy e Acesso
+##  Deploy e Acesso
 
 A aplicação está totalmente funcional e implantada online:
 
@@ -50,7 +50,7 @@ A aplicação está totalmente funcional e implantada online:
 
 ---
 
-## 💻 Como Acessar a Aplicação
+##  Como Acessar a Aplicação
 
 1.  Acesse o link da aplicação: [https://front-url-vitor-hugos-projects-411fbd87.vercel.app/](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/).
 2.  Você será redirecionado para a página de **Login**. Se não possuir uma conta, crie uma.
