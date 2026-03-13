@@ -40,6 +40,21 @@ O projeto é dividido em **Backend** (API) e **Frontend** (Interface do Usuário
 | **react-router-dom** | Gerenciamento das rotas da aplicação (navegação entre páginas). |
 | **Axios** | Cliente HTTP para realizar requisições eficientes à API Backend. |
 
+---
+
+## Testes (Pytest)
+
+O sistema utiliza **pytest** em conjunto com o **TestClient** para validar o comportamento da API.  
+Os testes garantem que rotas protegidas por **JWT** bloqueiem acessos não autenticados e verificam tanto os cenários de sucesso quanto de erro na criação de usuários.
+
+Também são realizados testes relacionados ao encurtador de URLs, incluindo:
+- criação de URLs encurtadas;
+- redirecionamento correto para a URL original;
+- acesso a URLs válidas;
+- validação da lógica de bloqueio para acessos inválidos ou inexistentes.
+
+---
+
 ##  Deploy e Acesso
 
 A aplicação está totalmente funcional e implantada online:
@@ -48,7 +63,7 @@ A aplicação está totalmente funcional e implantada online:
 * **Plataforma Frontend:** Vercel
 * **Plataforma Backend:** Render
 
----
+
 
 ##  Como Acessar a Aplicação
 
