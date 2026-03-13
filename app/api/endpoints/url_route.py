@@ -22,7 +22,7 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @routh.post(
-    '/get_url', status_code=HTTPStatus.CREATED, response_model=URLResponse
+    '/create_url', status_code=HTTPStatus.CREATED, response_model=URLResponse
 )
 def create_url_short_for_user(
     url: URLCreate, current_user: CurrentUser, db: Db
