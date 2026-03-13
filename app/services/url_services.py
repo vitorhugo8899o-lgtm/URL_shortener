@@ -23,16 +23,14 @@ def create_url_record_and_get_id(
     url_data: URLCreate, user_id: int, db: Session
 ) -> URL:
 
-    url_str = str(url_data.url) 
+    url_str = str(url_data.url)
 
-    condition = (URL.original_url == url_str)
-
+    condition = URL.original_url == url_str
 
     query_result = db.execute(select(URL).where(condition)).first()
-    
+
     if query_result:
-        existing_url = query_result[0] 
-        raise HTTPException(status_code=409, detail="Url already exists")
+        raise HTTPException(status_code=409, detail='Url already exists')
 
     new_url = URL(
         original_url=str(url_data.url),
@@ -88,7 +86,10 @@ def get_url_shorter(db: Db, short_code: str) -> str:
         raise HTTPException(status_code=404, detail='URL not found')
 
     now = datetime.now(timezone.utc)
-    if url_record.expires_at and url_record.expires_at.replace(tzinfo=timezone.utc) < now:
+    if (
+        url_record.expires_at
+        and url_record.expires_at.replace(tzinfo=timezone.utc) < now
+    ):  # noqa: E501
         raise HTTPException(status_code=410, detail='Expired url')
 
     url_record.clicks += 1
@@ -97,24 +98,24 @@ def get_url_shorter(db: Db, short_code: str) -> str:
     return url_record.original_url
 
 
-def get_url_user(current_user: User, db: Session):
+def get_url_user(current_user: User, db: Session) -> list[URL]:
     stmt = select(URL).where(URL.user_id == current_user.id)
     urls = db.execute(stmt).scalars().all()
 
     return {'urls': urls}
 
 
-def delete_url_user(current_user: User, db: Session, id_url: int):
+def delete_url_user(current_user: User, db: Session, id_url: int) -> str:
     stmt = select(URL).where(
-    (URL.id == id_url) & (URL.user_id == current_user.id)
-)
+        (URL.id == id_url) & (URL.user_id == current_user.id)
+    )
 
     url = db.scalar(stmt)
 
     if not url:
-        raise HTTPException(status_code=404,detail='Url not found')
-    
+        raise HTTPException(status_code=404, detail='Url not found')
+
     db.delete(url)
     db.commit()
 
-    return {'detail': 'URL successfully delete!'}
+    return {'message': 'URL successfully delete!'}

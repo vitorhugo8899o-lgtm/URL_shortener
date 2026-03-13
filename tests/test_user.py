@@ -161,8 +161,7 @@ def test_alter_user(client, token):
         '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
     )
 
-    response_data = response.json()
-    assert 'Successful changes, welcome.' in response_data
+    assert 'Successful changes, welcome.' in response.json()['message']
 
 
 def test_erro_current_user(client, token):
@@ -276,4 +275,4 @@ def test_delete_user(client, token):
     status = 200
 
     assert response.status_code == status
-    assert response_data['detail'] == 'User successfully deleted!'
+    assert response_data['message'] == 'User successfully deleted!'

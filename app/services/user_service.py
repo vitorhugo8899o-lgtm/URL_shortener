@@ -2,11 +2,11 @@ from datetime import datetime, timedelta, timezone
 from http import HTTPStatus
 from typing import Annotated
 
+import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import VerificationError
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -22,11 +22,11 @@ Form_data = Annotated[OAuth2PasswordRequestForm, Depends()]
 ph = PasswordHasher()
 
 
-def hash_password(senha):
+def hash_password(senha) -> str:
     return ph.hash(senha)
 
 
-def verify_password(password: str, db_password: str):
+def verify_password(password: str, db_password: str) -> bool:
     try:
         ph.verify(hash=db_password, password=password)
         return True
@@ -38,15 +38,15 @@ def verify_password(password: str, db_password: str):
         return False
 
 
-def user_exist(user_data: UserRegistry, db: Session = Depends(get_session)):
+def user_exist(
+    user_data: UserRegistry, db: Session = Depends(get_session)
+) -> UserRegistry:
 
     condition = (User.email == user_data.email) | (
         User.username == user_data.username
     )
 
-    found_user = db.execute(
-        select(User).where(condition)
-    ).scalar_one_or_none() 
+    found_user = db.execute(select(User).where(condition)).scalar_one_or_none()
 
     if found_user:
         if found_user.email == user_data.email:
@@ -62,7 +62,7 @@ def user_exist(user_data: UserRegistry, db: Session = Depends(get_session)):
 async def registry_user(
     db: Session = Depends(get_session),
     user_data: UserRegistry = Depends(user_exist),
-):
+) -> UserPublic:
 
     new_user = User(
         username=user_data.username,
@@ -79,7 +79,7 @@ async def registry_user(
     )
 
 
-def crete_token_acesses(data: dict):
+def crete_token_acesses(data: dict) -> str:
     to_encode = data.copy()
 
     expire = datetime.now(timezone.utc) + timedelta(
@@ -95,7 +95,7 @@ def crete_token_acesses(data: dict):
 def verifying_credentials(
     form_data: Form_data,
     db: Session = Depends(get_session),
-):
+) -> Token:
 
     user = db.execute(
         select(User).where(User.email == form_data.username)
@@ -119,7 +119,7 @@ def verifying_credentials(
 
 def get_current_user(
     token: str = Depends(oauth), db: Session = Depends(get_session)
-):
+) -> User:
 
     try:
         payload = jwt.decode(
@@ -146,7 +146,7 @@ def alter_user_information(
     user_data: UserRegistry,
     current_user: User,
     db: Session = Depends(get_session),
-):
+) -> str:
     try:
         if user_data.email != current_user.email:
             existing_user_by_email = db.execute(
@@ -179,7 +179,7 @@ def alter_user_information(
         db.commit()
         db.refresh(current_user)
 
-        return 'Successful changes, welcome.'
+        return {'message': 'Successful changes, welcome.'}
 
     except HTTPException:
         raise
@@ -194,7 +194,7 @@ def alter_user_information(
 def delete_user_bd(
     user_data: User = Depends(get_current_user),
     db: Session = Depends(get_session),
-):
+) -> dict:
 
     user = db.execute(
         select(User).where(User.email == user_data.email)
@@ -206,4 +206,4 @@ def delete_user_bd(
     db.delete(user)
     db.commit()
 
-    return {'detail': 'User successfully deleted!'}
+    return {'message': 'User successfully deleted!'}
