@@ -5,11 +5,9 @@ from app.db.models import URL
 
 def test_create_url_short(client, token):
     response = client.post(
-        '/shorther_url/get_url',
+        '/shorther_url/create_url',
         headers={'Authorization': f'Bearer {token}'},
-        json={
-            'url': 'https://www.google.com/search?gs_ssp=eJzj4tTP1TcwMU02T1JgNGB0YPBiS8_PT89JBQBASQXT&q=google&rlz=1C1FKPE_pt-PTBR1163BR1163&oq=goo&gs_lcrp=EgZjaHJvbWUqEwgBEC4YgwEYxwEYsQMY0QMYgAQyBggAEEUYQTITCAEQLhiDARjHARixAxjRAxiABDINCAIQABiDARixAxiABDIGCAMQRRg5MgYIBBBFGDwyBggFEEUYPDIGCAYQBRhAMgYIBxBFGEHSAQg1NjcyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8'
-        },
+        json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )
 
     status = HTTPStatus.CREATED
@@ -72,7 +70,7 @@ def test_redirect_url_not_found(client, token):
 
 def test_get_urls_user(client, token):
     url = client.post(
-        '/shorther_url/get_url',
+        '/shorther_url/create_url',
         headers={'Authorization': f'Bearer {token}'},
         json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )
@@ -90,13 +88,54 @@ def test_get_urls_user(client, token):
     assert 'urls' in json
 
 
-# def test_delete_url(client, token):
-#     create = client.post(
-#         '/shorther_url/get_url',
-#         headers={'Authorization': f'Bearer {token}'},
-#         json={
-#             'url': 'https://www.google.com/search?gs_ssp=eJzj4tTP1TcwMU02T1JgNGB0YPBiS8_PT89JBQBASQXT&q=google&rlz=1C1FKPE_pt-PTBR1163BR1163&oq=goo&gs_lcrp=EgZjaHJvbWUqEwgBEC4YgwEYxwEYsQMY0QMYgAQyBggAEEUYQTITCAEQLhiDARjHARixAxjRAxiABDINCAIQABiDARixAxiABDIGCAMQRRg5MgYIBBBFGDwyBggFEEUYPDIGCAYQBRhAMgYIBxBFGEHSAQg1NjcyajBqN6gCALACAA&sourceid=chrome&ie=UTF-8'
-#         },
-#     )
+def test_delete_url(client, token):
+    create = client.post(
+        '/shorther_url/create_url',
+        headers={'Authorization': f'Bearer {token}'},
+        json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
+    )
 
-#     response = client.post('/shorther_url/get_url')
+    print(create.json())
+
+    data = create.json()
+
+    url_id = data['id']
+
+    assert isinstance(url_id, int)
+
+    response = client.delete(
+        f'/shorther_url/Delete_URL?url_id={url_id}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert 'URL successfully delete!' in response.json()['message']
+
+
+def test_url_delete_not_found(client, token):
+    response = client.delete(
+        f'/shorther_url/Delete_URL?url_id={12}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert 'Url not found' in response.json()['detail']
+
+
+def test_same_url(client, token):
+    create1 = client.post(
+        '/shorther_url/create_url',
+        headers={'Authorization': f'Bearer {token}'},
+        json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
+    )
+
+    print(create1)
+
+    create2 = client.post(
+        '/shorther_url/create_url',
+        headers={'Authorization': f'Bearer {token}'},
+        json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
+    )
+
+    assert create2.status_code == HTTPStatus.CONFLICT
+    assert 'Url already exists' in create2.json()['detail']

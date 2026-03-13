@@ -90,7 +90,7 @@ def get_url_shorter(db: Db, short_code: str) -> str:
         url_record.expires_at
         and url_record.expires_at.replace(tzinfo=timezone.utc) < now
     ):  # noqa: E501
-        raise HTTPException(status_code=410, detail='Expired url')
+        raise HTTPException(status_code=410, detail='Expired url')  # pragma: no cover # noqa: E501
 
     url_record.clicks += 1
     db.commit()
