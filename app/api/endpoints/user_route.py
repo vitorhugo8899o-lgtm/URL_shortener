@@ -23,19 +23,19 @@ Db = Annotated[Session, Depends(get_session)]
 @routh_auth.post(
     '/Registry', status_code=HTTPStatus.CREATED, response_model=UserPublic
 )  # noqa: E501
-async def create_user(user: Annotated[UserRegistry, Depends(registry_user)]):
-    return user
+async def create_user(user: Annotated[UserRegistry, Depends(registry_user)]) -> UserPublic:
+    return UserPublic.model_validate(user)
 
 
 @routh_auth.post('/Login', status_code=HTTPStatus.OK, response_model=Token)
-def login_user(token: Annotated[Token, Depends(verifying_credentials)]):
-    return token
+def login_user(token: Annotated[Token, Depends(verifying_credentials)]) -> Token:
+    return Token.model_validate(token)
 
 
 @routh_auth.put('/alter', status_code=HTTPStatus.OK, response_model=Message)
 def alter_information(
     user_data: UserRegistry, current_user: CurrentUser, db: Db
-):
+) -> Message:
     return alter_user_information(
         user_data=user_data, current_user=current_user, db=db
     )
@@ -44,6 +44,6 @@ def alter_information(
 @routh_auth.delete(
     '/delete', status_code=HTTPStatus.OK, response_model=Message
 )  # noqa: E501
-def delete_user(current_user: CurrentUser, db: Db):
+def delete_user(current_user: CurrentUser, db: Db) -> Message:
 
     return delete_user_bd(user_data=current_user, db=db)
