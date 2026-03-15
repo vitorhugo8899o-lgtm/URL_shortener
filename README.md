@@ -86,8 +86,8 @@ A aplicação está totalmente funcional e implantada online:
 
 1.  **Clone o Repositório:**
     ```bash
-    git clone [LINK_DO_SEU_REPOSITORIO]
-    cd URL_shortener # Ou o nome da pasta do seu projeto
+    git clone https://github.com/vitorhugo8899o-lgtm/URL_shortener
+    cd URL_shortener 
     ```
 2.  **Crie e Ative o Ambiente Virtual com Poetry:**
     ```bash
