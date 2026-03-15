@@ -102,5 +102,7 @@ A aplicação está totalmente funcional e implantada online:
     task run
     ```
 
+**OBS: A documentação no swagger está desativada para otimização no render, caso queria ativar basta retirar nos parametros do app**
+
 A aplicação estará rodando localmente no endereço: `http://127.0.0.1:8000` (porta 8000).
 
