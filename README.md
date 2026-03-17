@@ -6,8 +6,6 @@
 
 O **URL_shortener** é um projeto desenvolvido com o objetivo de transformar URLs longas em links curtos e gerenciáveis.
 
-Este projeto foi criado com o propósito de enriquecer o currículo, demonstrando habilidades completas de desenvolvimento **full-stack**, desde a criação de APIs seguras até a implementação de uma interface de usuário dinâmica.
-
 ##  Funcionalidades Principais
 
 * **Encurtamento de URL:** Transforma qualquer URL longa em um link curto e exclusivo.
