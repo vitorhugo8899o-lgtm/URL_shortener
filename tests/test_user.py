@@ -4,7 +4,7 @@ from http import HTTPStatus
 def test_create_user(client):
 
     response = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste85',
             'email': 'Email@st774ring.com',
@@ -26,7 +26,7 @@ def test_create_user(client):
 
 def test_username_exist(client):
     client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unico',
             'email': 'novo_email@test.com',
@@ -35,7 +35,7 @@ def test_username_exist(client):
     )
 
     response = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unico',
             'email': 'outro_email@test.com',
@@ -51,7 +51,7 @@ def test_username_exist(client):
 
 def test_email_exist(client):
     client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -60,7 +60,7 @@ def test_email_exist(client):
     )
 
     response = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unico',
             'email': 'novo_email@test.com',
@@ -76,7 +76,7 @@ def test_email_exist(client):
 
 def test_create_token(client):
     create = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -87,7 +87,7 @@ def test_create_token(client):
     print(create.json())
 
     response = client.post(
-        '/auth/Login',
+        '/users/Login',
         data={'username': 'novo_email@test.com', 'password': 'secretpassword'},
     )
 
@@ -100,7 +100,7 @@ def test_create_token(client):
 
 def test_information_invalide_email(client):
     create = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -111,7 +111,7 @@ def test_information_invalide_email(client):
     print(create)
 
     response = client.post(
-        '/auth/Login',
+        '/users/Login',
         data={
             'username': 'novo_email88@test.com',
             'password': 'secretpassword',
@@ -126,7 +126,7 @@ def test_information_invalide_email(client):
 
 def test_information_invalide_password(client):
     create = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -137,7 +137,7 @@ def test_information_invalide_password(client):
     print(create)
 
     response = client.post(
-        '/auth/Login',
+        '/users/Login',
         data={
             'username': 'novo_email@test.com',
             'password': 'secret88password',
@@ -158,7 +158,7 @@ def test_alter_user(client, token):
     }
 
     response = client.put(
-        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+        '/users/me', headers={'Authorization': f'Bearer {token}'}, json=alter
     )
 
     assert 'Successful changes, welcome.' in response.json()['message']
@@ -180,7 +180,7 @@ def test_erro_current_user(client, token):
     )
 
     response = client.put(
-        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+        '/users/me', headers={'Authorization': f'Bearer {token}'}, json=alter
     )
 
     status = 401
@@ -200,7 +200,7 @@ def test_decode_token_erro(client):
     token = 'shgdoasdbaosdb.342134sdfdsff.q3sadbs'
 
     response = client.put(
-        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+        '/users/me', headers={'Authorization': f'Bearer {token}'}, json=alter
     )
 
     status = 401
@@ -212,7 +212,7 @@ def test_decode_token_erro(client):
 
 def test_alter_email_exist(client, token):
     create = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -229,7 +229,7 @@ def test_alter_email_exist(client, token):
     }
 
     response = client.put(
-        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+        '/users/me', headers={'Authorization': f'Bearer {token}'}, json=alter
     )
 
     response_data = response.json()
@@ -239,7 +239,7 @@ def test_alter_email_exist(client, token):
 
 def test_alter_username_exist(client, token):
     create = client.post(
-        '/auth/Registry',
+        '/users/Registry',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -256,7 +256,7 @@ def test_alter_username_exist(client, token):
     }
 
     response = client.put(
-        '/auth/alter', headers={'Authorization': f'Bearer {token}'}, json=alter
+        '/users/me', headers={'Authorization': f'Bearer {token}'}, json=alter
     )
 
     response_data = response.json()
@@ -267,7 +267,7 @@ def test_alter_username_exist(client, token):
 def test_delete_user(client, token):
 
     response = client.delete(
-        '/auth/delete', headers={'Authorization': f'Bearer {token}'}
+        '/users/me', headers={'Authorization': f'Bearer {token}'}
     )
 
     response_data = response.json()

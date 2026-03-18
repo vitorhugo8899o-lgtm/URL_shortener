@@ -78,7 +78,7 @@ def test_get_urls_user(client, token):
     print(url)
 
     response = client.get(
-        '/shorther_url/get_my_urls',
+        '/shorther_url/my_urls',
         headers={'Authorization': f'Bearer {token}'},
     )
 
