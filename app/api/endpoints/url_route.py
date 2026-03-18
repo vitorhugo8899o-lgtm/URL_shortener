@@ -22,7 +22,7 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @routh.post(
-    '/create_url', status_code=HTTPStatus.CREATED, response_model=URLResponse
+    '', status_code=HTTPStatus.CREATED
 )
 def create_url_short_for_user(
     url: URLCreate, current_user: CurrentUser, db: Db
@@ -31,12 +31,12 @@ def create_url_short_for_user(
     return create_short_url(db=db, url_data=url, user_id=current_user.id)
 
 
-@routh.get('/get_my_urls', status_code=HTTPStatus.OK, response_model=URlList)
+@routh.get('/my_urls', status_code=HTTPStatus.OK)
 def show_my_urls(current_user: CurrentUser, db: Db) -> URlList:
     return get_url_user(current_user, db)
 
 
-@routh.delete('/Delete_URL', status_code=HTTPStatus.OK, response_model=Message)
+@routh.delete('/Delete_URL', status_code=HTTPStatus.OK)
 def delete_url(current_user: CurrentUser, db: Db, url_id: int) -> Message:
     return delete_url_user(current_user, db, url_id)
 

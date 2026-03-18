@@ -71,7 +71,7 @@ def token(client, user):
         'password': raw_password,
     }
 
-    response = client.post('/auth/Login', data=login_data)
+    response = client.post('/users/Login', data=login_data)
     return response.json()['access_token']
 
 

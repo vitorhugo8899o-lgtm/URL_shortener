@@ -6,6 +6,7 @@ from app.api.endpoints.user_route import routh_auth
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
