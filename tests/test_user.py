@@ -4,7 +4,7 @@ from http import HTTPStatus
 def test_create_user(client):
 
     response = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste85',
             'email': 'Email@st774ring.com',
@@ -26,7 +26,7 @@ def test_create_user(client):
 
 def test_username_exist(client):
     client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unico',
             'email': 'novo_email@test.com',
@@ -35,7 +35,7 @@ def test_username_exist(client):
     )
 
     response = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unico',
             'email': 'outro_email@test.com',
@@ -51,7 +51,7 @@ def test_username_exist(client):
 
 def test_email_exist(client):
     client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -60,7 +60,7 @@ def test_email_exist(client):
     )
 
     response = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unico',
             'email': 'novo_email@test.com',
@@ -76,7 +76,7 @@ def test_email_exist(client):
 
 def test_create_token(client):
     create = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -100,7 +100,7 @@ def test_create_token(client):
 
 def test_information_invalide_email(client):
     create = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -126,7 +126,7 @@ def test_information_invalide_email(client):
 
 def test_information_invalide_password(client):
     create = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -212,7 +212,7 @@ def test_decode_token_erro(client):
 
 def test_alter_email_exist(client, token):
     create = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
@@ -239,7 +239,7 @@ def test_alter_email_exist(client, token):
 
 def test_alter_username_exist(client, token):
     create = client.post(
-        '/users/Registry',
+        '/users',
         json={
             'username': 'Teste_Unic8o',
             'email': 'novo_email@test.com',
