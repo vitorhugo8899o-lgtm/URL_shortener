@@ -7,15 +7,6 @@ from app.api.endpoints.user_route import routh_auth
 app = FastAPI()
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        'https://front-url-vitor-hugos-projects-411fbd87.vercel.app',
-    ],
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
 
 app.include_router(routh_auth)
 app.include_router(routh)
