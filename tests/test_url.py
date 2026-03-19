@@ -5,7 +5,7 @@ from app.db.models import URL
 
 def test_create_url_short(client, token):
     response = client.post(
-        '/shorther_url/create_url',
+        '/shorther_url',
         headers={'Authorization': f'Bearer {token}'},
         json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )
@@ -70,7 +70,7 @@ def test_redirect_url_not_found(client, token):
 
 def test_get_urls_user(client, token):
     url = client.post(
-        '/shorther_url/create_url',
+        '/shorther_url',
         headers={'Authorization': f'Bearer {token}'},
         json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )
@@ -90,7 +90,7 @@ def test_get_urls_user(client, token):
 
 def test_delete_url(client, token):
     create = client.post(
-        '/shorther_url/create_url',
+        '/shorther_url',
         headers={'Authorization': f'Bearer {token}'},
         json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )
@@ -104,7 +104,7 @@ def test_delete_url(client, token):
     assert isinstance(url_id, int)
 
     response = client.delete(
-        f'/shorther_url/Delete_URL?url_id={url_id}',
+        f'/shorther_url/url?url_id={url_id}',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -114,7 +114,7 @@ def test_delete_url(client, token):
 
 def test_url_delete_not_found(client, token):
     response = client.delete(
-        f'/shorther_url/Delete_URL?url_id={12}',
+        f'/shorther_url/url?url_id={12}',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -124,7 +124,7 @@ def test_url_delete_not_found(client, token):
 
 def test_same_url(client, token):
     create1 = client.post(
-        '/shorther_url/create_url',
+        '/shorther_url',
         headers={'Authorization': f'Bearer {token}'},
         json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )
@@ -132,7 +132,7 @@ def test_same_url(client, token):
     print(create1)
 
     create2 = client.post(
-        '/shorther_url/create_url',
+        '/shorther_url',
         headers={'Authorization': f'Bearer {token}'},
         json={'url': 'https://youtu.be/ufAmIBRFohM?si=KDc-ijsQhj9Uqle-'},
     )

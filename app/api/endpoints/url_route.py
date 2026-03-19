@@ -36,7 +36,7 @@ def show_my_urls(current_user: CurrentUser, db: Db) -> URlList:
     return get_url_user(current_user, db)
 
 
-@routh.delete('/Delete_URL', status_code=HTTPStatus.OK)
+@routh.delete('/url', status_code=HTTPStatus.OK)
 def delete_url(current_user: CurrentUser, db: Db, url_id: int) -> Message:
     return delete_url_user(current_user, db, url_id)
 

@@ -21,7 +21,7 @@ Db = Annotated[Session, Depends(get_session)]
 
 
 @routh_auth.post(
-    '/Registry', status_code=HTTPStatus.CREATED
+    '', status_code=HTTPStatus.CREATED
 )
 async def create_user(user: Annotated[UserRegistry, Depends(registry_user)]) -> UserPublic:  # noqa: E501
     return UserPublic.model_validate(user)
