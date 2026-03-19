@@ -28,15 +28,6 @@ O projeto é dividido em **Backend** (API) e **Frontend** (Interface do Usuário
 | **Hashids** | Lógica utilizada para gerar a parte única da URL encurtada, misturando a `SECRET_KEY` + a base. |
 | **Pytest** | Framework de testes para garantir a funcionalidade dos endpoints. |
 
-### ⚛️ Frontend (Interface)
-
-| Tecnologia | Descrição |
-| :--- | :--- |
-| **React + Vite** | Biblioteca JavaScript e bundler para construção de interfaces rápidas e modernas. |
-| **JavaScript** | Linguagem principal do desenvolvimento frontend. |
-| **Tailwind CSS** | Framework de classes utilitárias para estilização rápida e responsiva. |
-| **react-router-dom** | Gerenciamento das rotas da aplicação (navegação entre páginas). |
-| **Axios** | Cliente HTTP para realizar requisições eficientes à API Backend. |
 
 ---
 
