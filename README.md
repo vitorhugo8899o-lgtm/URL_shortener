@@ -1,6 +1,6 @@
 # 🔗 URL_shortener
 
-[![Status do Projeto](https://img.shields.io/badge/Status-Em%20Produção-brightgreen)](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/)
+[![Status do Projeto](https://img.shields.io/badge/Status-Em%20Pausa-red)](https://front-url-vitor-hugos-projects-411fbd87.vercel.app/)
 
 ##  Descrição do Projeto
 
